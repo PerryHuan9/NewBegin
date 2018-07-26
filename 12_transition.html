@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试Vue的过渡效果</title>
+    <script src="js/vue.js"></script>
+    <style>
+        .fade-enter-active, .fade-leave-active {
+            transition: opacity 2s;
+        }
+        
+        .fade-enter, .fade-leave-to {
+            opacity: 0;
+        }
+        
+        
+        .slide-enter-active {
+            /*过程速度默认为ease，即以慢速开始*/
+            transition: 0.3s;
+        }
+        
+        .slide-leave-active {
+            transition: 0.8s cubic-bezier(1.0, 0.8, 0.3, 1);
+        }
+        
+        .slide-enter, .slide-leave-to {
+            opacity: 0;
+            transform: translateX(10px);
+        }
+    
+    
+    </style>
+
+
+</head>
+<body>
+    <div id="app">
+        <button @click="show=!show">点我</button>
+        <transition name="fade">
+            <p :style="css" v-show="show">过渡实例</p>
+        </transition>
+        <button @click="slideShow=!slideShow">点我不同</button>
+        <transition name="slide">
+            <p v-show="slideShow" :style="css2">滑动出入</p>
+        </transition>
+    
+    
+    </div>
+    
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data: {
+                show: true,
+                css: {
+                    color: 'red',
+                    fontSize: '30px'
+                },
+                slideShow:true,
+                css2:{
+                    color:'blue',
+                    'font-size':'30px'
+                }
+            }
+        })
+    
+    </script>
+
+
+</body>
+</html>

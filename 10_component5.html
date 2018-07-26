@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>动态组件</title>
+    <script src="js/vue.js"></script>
+    <style>
+        .tab_button {
+            margin-right: -1px;
+            border: 1px solid #ccc;
+            margin-bottom: 1px;
+        }
+        
+        .tab_button:hover {
+            background: grey;
+        }
+        
+        .active {
+            background: grey;
+        }
+        
+        #app div {
+            height: 50px;
+            width: 250px;
+            border: 1px solid #ccc;
+        }
+    
+    
+    </style>
+</head>
+<body>
+    <div id="app">
+        <button v-for="tab in tabs"
+                :key="tab"
+                :class="['tab_button',currentTab===tab?'active':'']"
+                @click="currentTab=tab">
+            {{tab}}
+        </button>
+        <component :is="currentTab+ 'Component'">
+        </component>
+    
+    </div>
+    
+    <script>
+        Vue.component('HomeComponent', {
+            template:
+                `<div>This is HomeComponent</div>
+                `
+        });
+        Vue.component('PostsComponent', {
+            template:
+                `<div>This is PostsComponent</div>
+                `
+        });
+        Vue.component('ArchiveComponent', {
+            template:
+                `<div>This is ArchiveComponent</div>
+                `
+        });
+
+
+        new Vue({
+            el: "#app",
+            data: {
+                tabs: ['Home', 'Posts', 'Archive'],
+                currentTab: "Home",
+            }
+
+
+        });
+    
+    </script>
+
+
+</body>
+</html>

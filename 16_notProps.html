@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试非props特性</title>
+    <script src="js/vue.js"></script>
+    <style>
+        #app {
+            color: red;
+        }
+        
+        .basecss {
+            color: blue;
+        }
+    
+    </style>
+
+</head>
+<body>
+    <!--替换/合并已有的特性,其它属性是替换，style和class是合并-->
+    <!--禁用特性继承和$attrs配合使用-->
+    <!--$attrs储存了所有设置的属性和值-->
+    <div id="app">
+        <h2>外面的标题:</h2>
+        <base-input v-model="username" class="basecss" placeholder="Enter you name" label="标题"></base-input>
+        <p>{{username}}</p>
+    </div>
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                username: ""
+            },
+            components: {
+                baseInput: {
+                    inheritAttrs: false,
+                    template:
+                        `<div>
+                           {{label}}
+                          <input type="text" v-bind="$attrs" :value="value" @input="$emit('input',$event.target.value)">
+                        </div>
+                    `,
+                    props: {
+                        value: String,
+                        label: [String, Number]
+                    }
+
+                }
+            }
+
+        })
+    
+    </script>
+
+
+</body>
+</html>

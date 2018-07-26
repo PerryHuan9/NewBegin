@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试Vue的组件</title>
+    <script src="js/vue.js"></script>
+    <!--Vue组件是可复用的Vue实例，除了el根属性不可用，其它诸如打他属性都可用，而且data必须是一个函数-->
+    <style>
+        .a {
+            color: inherit;
+        }
+    
+    </style>
+</head>
+<body>
+    
+    <div id="app">
+        <!--html对大小写不敏感，所以在js中使用驼峰原则时，在html中会转为kebab-case格式命名-->
+        <button-Counter></button-counter>
+        <blog-post v-for="post in posts" :key="post.id" :title="post.title"></blog-post>
+        
+        <!--动态修改组件的css，第一种方式，组件内部封装好-->
+        <myarticle v-for="post in posts"
+                   :key="post.id+200"
+                   :title="post.title"
+                   :body="post.body"
+                   @enlarge="mfontSize+=0.1">
+        </myarticle>
+        <br>
+        <hr>
+        <br>
+        <!--第二种方式，通过$emit()自定义事件上传给父组件处理,
+        对于emit上传的附加参数可以使用$event接收,或者是事件处理函数的第一个参数-->
+        <div :style="{fontSize:fontSize+'em'}">
+            <my-article v-for="p in posts"
+                        :key="p.id+100"
+                        :title="p.title"
+                        :body="p.body"
+                        @enlarge2="fontSize+=$event"
+                        @enlarge="enlargeFontSize">
+            </my-article>
+        
+        </div>
+    </div>
+    
+    
+    <script>
+        // 创建全局button-counter组件
+        Vue.component("buttonCounter", {
+            data: function () {
+                return {
+                    count: 0
+                }
+            },
+            template: `<button @click="count++">you click me {{count}} times.</button>`
+        });
+        //创建全局blog-post组件
+        Vue.component("blog-post", {
+            props: ["title"],
+            template: '<h3 style="text-align: center">{{title}}</h3>'
+        });
+
+        //创建全局myarticle组件
+        Vue.component("myarticle", {
+            props: ["title", "body"],
+            data: function () {
+                return {
+                    font: 30
+                }
+            },
+            template:
+                `<div>
+                    <h3 :style="{textAlign:'center',fontSize:font+'px'}">{{title}}</h3>
+                    <button @click="font++" >放大字体</button>
+                     <p style="font-size:25px" >{{body}}</p>
+                 </div>
+                `,
+        });
+
+        //创建全局my-article组件
+        Vue.component("my-article", {
+            props: ['title', 'body'],
+            template:
+                `<div>
+                    <h3 style="text-align:center">{{title}}</h3>
+                    <p style="margin: 10px auto;width: 100px;border:1px solid red"
+                    @click='$emit("enlarge",0.2)'>enlarge</p>
+                    <p style="margin: 10px auto;width: 100px;border:1px solid red"
+                    @click="enlargeFont">enlarge</p>
+                    <p>{{body}}</p>
+                </div>`,
+            methods: {
+                enlargeFont: function () {
+                    this.$emit('enlarge2', 0.1);
+                }
+            }
+        })
+        ;
+
+
+        new Vue({
+            el: "#app",
+            data: {
+                posts: [],
+                fontSize: 1
+            },
+            watch: {
+                fontSize: function (value) {
+                    // alert(value);
+                }
+            },
+            created: function () {
+                var vm = this;
+                fetch('https://jsonplaceholder.typicode.com/posts')
+                    .then(function (responce) {
+                        return responce.json();
+                    })
+                    .then(function (data) {
+                        if (Array.isArray(data)) {
+                            vm.posts = data.slice(0, 6)
+                        }
+                    })
+            },
+            methods: {
+                enlargeFontSize: function (value) {
+                    this.fontSize += value;
+                }
+            }
+
+
+        })
+    
+    
+    </script>
+
+
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>显示数组过滤的结果</title>
+    <script src="js/vue.js"></script>
+
+</head>
+<body>
+    <div id="app">
+        
+        <ul>
+            <li v-for="user in sortUsers">{{user}}</li>
+        </ul>
+        <hr>
+        <!--对于无法使用计算属性的情况使用方法-->
+        <ul>
+            <li v-for="user in mysort(users)" v-if="user>10">{{user}}</li>
+        </ul>
+        <hr>
+        <ul>
+            <li v-for="user in yourSort()">{{user}}</li>
+        </ul>
+        <hr>
+        <!--v-for在组件中的使用,key是必须的-->
+        <form action="" @submit.prevent="addTodo">
+            <label for="todo">Add a todo</label>
+            <input type="text" id="todo" v-model="name" placeholder="标题">
+            <button>Add</button>
+        </form>
+        <ul>
+            <li is="todo_item"
+                v-for="(todo,index) in todos"
+                :key="todo.id"
+                :name="todo.name"
+                @remove="todos.splice(index,1)"></li>
+        </ul>
+    
+    
+    </div>
+    <script>
+        Vue.component("todo_item", {
+            props: ['name'],
+            template:
+                `<li>
+                        <span>{{name}}</span>
+                        <button @click="$emit('remove')">Remove</button>
+                    </li>
+                `
+
+        });
+
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                users: [1, 3, 512, 34, 23, 6, 2, 45, 745, 226, 2.4],
+                todos: [
+                    {id: 1, name: "Take out the trash"},
+                    {id: 2, name: "Move you hand"},
+                    {id: 3, name: "Hello Word"}
+                ],
+                nextId: 4,
+                name: ""
+            },
+            computed: {
+                sortUsers: function () {
+                    return this.users.sort(function (v1, v2) {
+                        return v1 - v2;
+                    });
+                }
+            },
+            methods: {
+                mysort: function (value) {
+                    return value.sort(function (v1, v2) {
+                        return v1 - v2;
+                    });
+                },
+                yourSort: function () {
+                    return this.users.filter(function (value, index, array) {
+                        return value > 50;
+                    }).sort(function (v1, v2) {
+                        return v1 - v2;
+                    });
+                },
+                addTodo: function () {
+                    if (!this.name) {
+                        alert("请输入标题");
+                    } else {
+                        this.todos.push({id: this.nextId++, name: this.name});
+                    }
+                    this.name = "";
+
+                },
+                mydo: function () {
+                    alert("click");
+                }
+            }
+        });
+    
+    
+    </script>
+
+</body>
+</html>

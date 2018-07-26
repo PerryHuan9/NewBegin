@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试vue的模板语法</title>
+    <script src="https://cdn.bootcss.com/vue/2.2.2/vue.min.js"></script>
+    <style>
+        .changeColor{
+            color: red;
+            font-style: italic;
+            
+        }
+        
+    </style>
+    
+</head>
+<body>
+    <div id="div">
+        <!--v-html改变文本-->
+        <div v-html="message"></div>
+        <!--v-bind改变属性,v-model设置和接收单选框和复选框的选中状态-->
+        <label for="color">我要改变颜色</label><input type="checkbox" v-model="isChange" id="color">
+        <div v-bind:class="{changeColor:isChange}" id="changeColor">我是要改变颜色的角色</div>
+        <!--表达式-->
+        {{5+5}}<br>
+        {{ok ? 'yes':'no'}}<br>
+        {{info.split('').reverse().join("")}}
+        <!--指令，带有v-前缀的都是Vue的指令-->
+        <!--v-if表示是否显示该元素,true or false-->
+        <br><input v-model="isShow" type="checkbox">是否显示
+        <p v-if="isShow">v-if决定是否插入该元素</p><br>
+        
+        <!--参数-->
+        <a v-bind:href="url" target="_blank">{{urlName}}</a>
+        
+        <!--v-on监听DOM事件-->
+        <p>{{testchar}}</p>
+        <button v-on:click="mydo">操作字符</button>
+        
+        <!--v-model实现双向绑定-->
+        <p>{{contend}}</p>
+        <input type="text" v-model="contend">
+        
+        <!--过滤器-->
+        <p>{{news|capitalize}}</p>
+        <!--过滤器可以串联-->
+        <p>{{my|filterA|filterB}}</p>
+        <!--过滤器是函数，可以接受参数-->
+        <p>{{name|filter("你好啊",param)}}</p>
+        <!--Vue为两个最为常用的指令v-bind和v-on提供了缩写
+        v-bind:  :
+        v-on:  @
+        -->
+        <p :style="css">缩写方式绑定style属性</p>
+        
+        <div style="height: 200px;width: 200px;background: yellow;color: white" @mouseover="mouseoverDo"
+             :style="css2" @mouseleave="mouseleaveDo">
+            测试Vue监控鼠标触摸事件
+        </div>
+        
+        
+        
+        
+    </div>
+    
+    <script>
+        var param="我知道你是谁";
+        new Vue({
+            el:"#div",
+            data:{
+                message:"Hello EveryOne !",
+                isChange:false,
+                ok:true,
+                info:"HelloWord",
+                seen:false,
+                isShow:false,
+                url:"http://www.baidu.com",
+                urlName:"百度",
+                contend:'初始化内容',
+                testchar:"Don't mind angthing except study.",
+                news:"a cat can be fly.",
+                my:[10,23,"dans","asdhad",400,23,1231234,123,12,435,23],
+                name:"perry",
+                css:{
+                    color:'blue',
+                    textDecoration:'underline'
+                },
+                css2:null
+            },
+            methods:{
+                mydo:function () {
+                    this.testchar=this.testchar.split(" ");
+                },
+                mouseoverDo:function () {
+                    this.css2={
+                        background:'red'
+                    }
+                },
+                mouseleaveDo:function () {
+                    this.css2={
+                        background:'blue'
+                    }
+                }
+            },
+            filters:{
+                capitalize:function (value) {
+                    if(!value) return "";
+                    value=value.toString();
+                    return value.charAt(0).toUpperCase()+value.slice(1);
+                },
+                filterA:function (value) {
+                    console.info("filterA:"+value);
+                    if(Array.isArray(value)){
+                        value=value.filter(
+                            function (item,index,array) {
+                                 return (typeof item=='number');
+                            }
+                        );
+                    }
+                    return value;
+                },
+                filterB:function (value) {
+                    console.info(value);
+                    if(Array.isArray(value)){
+                        return value.filter(
+                            function (item) {
+                                return item<100;
+                            }
+                        );
+                    }
+                },
+                filter:function (name,param1,param2) {
+                    return param1+" ! "+name+" ,"+param2;
+                }
+                
+                
+            }
+        });
+        
+        
+        
+    </script>
+
+
+
+    
+</body>
+</html>

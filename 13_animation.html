@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>实现动画效果</title>
+    <script src="js/vue.js"></script>
+    <style>
+        .bounce-enter-active{
+            animation: bounce-in .5s;
+        }
+        .bounce-leave-active{
+            animation: bounce-in .5s reverse;
+        }
+        
+        @keyframes bounce-in {
+            0%{
+                transform: scale(0);
+            }
+            50%{
+                transform: scale(1.5);
+            }
+            100%{
+                transform: scale(1);
+            }
+        }
+        
+    </style>
+    
+</head>
+<body>
+    <div id="app">
+        <button @click="show=!show">点我</button>
+        <transition name="bounce">
+            <p v-show="show" :style="css">我是一只小小鸟，怎么飞都飞不高</p>
+        </transition>
+        
+        
+    </div>
+    
+    <script>
+        new Vue({
+            el:"#app",
+            data:{
+                show:true,
+                css:{
+                    color:'red',
+                    fontSize:"30px"
+                }
+            }
+        })
+        
+    </script>
+    
+    
+</body>
+</html>

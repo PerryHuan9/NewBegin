@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试if条件语句</title>
+    <script src="https://cdn.bootcss.com/vue/2.2.2/vue.min.js"></script>
+    
+</head>
+<body>
+    <!--if语句-->
+    
+    <div id="app">
+        <p v-if="seen">现在你可以看到我了</p>
+        <template v-if="ok">
+            <h1>测试V-if</h1>
+            <p>测试完成</p>
+        </template>
+        
+        <!--<p v-if="Math.random()>0.5">-->
+        <p v-if="num>0.5">
+            Sorry
+        </p>
+        <p v-else>
+            Not Sorry
+        </p>
+        
+        <p v-if="type=='A'">A</p>
+        <p v-else-if="type=='B'">B</p>
+        <p v-else-if="type=='C'">C</p>
+        <p v-else>Other</p>
+        
+        
+        <p v-show="show">v-show也可以用来决定是否显示这个元素</p>
+        
+        
+    
+    </div>
+    <script>
+        var vue= new Vue({
+            el:"#app",
+            data:{
+                seen:true,
+                ok:true,
+                type:'d',
+                show:true,
+                num:Math.random(),
+                
+            }
+        })
+        console.info("随机数为："+vue.num);
+    
+    </script>
+
+
+</body>
+</html>

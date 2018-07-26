@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试Vue组件</title>
+    <script src="js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <p>检测v-model的由来</p>
+        <!--在组件上使用v-model-->
+        <!--先明确v-model的由来,以下二者等价-->
+        <input type="text" v-model="info">
+        <p>{{info}}</p>
+        <input type="text" :value="info2" @input="info2=$event.target.value">
+        <p>{{info2}}</p><br>
+        <my-input v-model="contend"></my-input>
+        <br>
+        <hr>
+        
+        <input-model :model="inputObject" @inputs="inputObject=$event"></input-model>
+        {{inputObject.text}}:{{inputObject.checkbox}}
+    
+    </div>
+    
+    <script>
+        Vue.component("my-input", {
+            props: ["value"],
+            template:
+                `<div>
+                       <h3>输入框</h3>
+                       <p>input:{{value}}</p>
+                       <input @input="$emit('input',$event.target.value)" :value="value"/>
+                </div>`
+        });
+
+        Vue.component("input-model", {
+            props: ["model"],
+            data: function () {
+                return {
+                    allValues: null
+                }
+            },
+            template:
+                `<div>
+                       <input type="text" @input="handlerInput($event.target.value,'text',model)" :value="model.text" >
+                       <input type="checkbox" @input="handlerInput($event.target.value,'checkbox')" v-model="model.checkbox" >
+                </div>`,
+            methods: {
+                handlerInput: function (param1, param2, model) {
+                    if (null == this.allValues) {
+                        this.allValues = model;
+                    }
+                    this.allValues[param2] = param1;
+                    this.$emit('inputs', this.allValues);
+                }
+            }
+        });
+
+
+        new Vue({
+            el: "#app",
+            data: {
+                info: "",
+                info2: "",
+                contend: "天才也是需要努力的，何况常人呼",
+                inputObject: {
+                    text: "失败乃成功之母",
+                    checkbox: true
+                }
+            },
+            watch: {
+                inputObject: function (newValue) {
+                    // for (field in newValue) {
+                    //     console.info(field + ":" + newValue[field]);
+                    // }
+                }
+            },
+            methods: {
+                received: function (param) {
+                    for (field in param) {
+                        console.info(field + ":" + param[field]);
+                    }
+                    this.inputObject = param;
+                }
+            }
+        })
+    
+    </script>
+
+
+</body>
+</html>

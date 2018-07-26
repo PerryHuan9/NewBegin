@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue的事件处理器</title>
+    <script src="js/vue.js"></script>
+    <style>
+        button{
+        }
+        
+    </style>
+    
+</head>
+<body>
+    <div id="app">
+        <!--1、vue事件-->
+        <button @click="counter++">点击统计</button>
+        <p>鼠标店家了{{counter}}次</p>
+        <p @click="greet">点击打招呼</p>
+        <div @click="sayHi('perry')">sayHi</div>
+        
+        <!--2、事件修饰符 有.stop、.prevent、.capture、.self、.once-->
+        <!--测试.stop  阻止冒泡修饰符-->
+        <!--如不加stop修饰符，点击子元素的点击事件，父元素以上的点击事件也会被触发-->
+        <!--其事件的传递是逐级上传的，只要截断父元素，其之上元素的事件便不会触发-->
+        <div @click="parent">
+            parent
+            <div @click.stop="son">
+                son
+                <div @click="grandson">grandson</div>
+            </div>
+        </div>
+        <br><br>
+        
+        <!--测试caputure 捕获事件修饰符,设置了捕获修饰符的元素，其子元素点击时，首先会触发该元素的事件-->
+        <div @click="parent">
+            parent
+            <div @click.capture="son">
+                son
+                <div @click="grandson">grandson</div>
+            </div>
+        </div>
+        <br><br>
+        
+        <!--prevent阻止元素默认事件，比如点击链接和提交表格时会默认刷新当前页面，设置后可不刷新-->
+        <a href="http://www.baidu.com"  @click.prevent="">链接</a>
+        <br><br>
+        
+        <!--.self事件，只有当前元素点击时才会触发事件，其子元素并不会,当capture和self串联时,self发生作用-->
+        <div @click="parent">
+            parent
+            <div @click.self="son">
+                son
+                <div @click="grandson">grandson</div>
+            </div>
+        </div>
+        <br><br>
+        
+        <!--once 事件值触发1次-->
+        <p @click.once="doOnce">只能点击一次</p>
+        
+        <!--3、按键修饰符-->
+        <!--alt+c触发事件-->
+        <input @keyup.alt.67="clear">
+        <!--ctr+click触发事件-->
+        <div @click.ctrl="doSome">ctrl+点击即可触发事件</div>
+        
+        <div @keyup.alt.f1="alert(1)">按下F1按键</div>
+        
+        
+        
+        
+    </div>
+    
+    
+    <script>
+        <!--自定义全局按键修饰符别名-->
+        Vue.config.keyCodes.f1=112;
+        
+        var app=new Vue({
+            el:'#app',
+            data:{
+                counter:0,
+                name:"Vue.js"
+            },
+            methods:{
+                greet:function (event) {
+                    alert('Hello ,'+this.name+" !");
+                    // `event` 是原生 DOM 事件
+                    if(event){
+                        alert(event.target.tagName);
+                    }
+                },
+                sayHi:function (name) {
+                    alert("Hi ! "+name);
+                },
+                parent:function () {
+                    console.info("parent");
+                },
+                son:function () {
+                    console.info("son");
+                },
+                grandson:function () {
+                    console.info("grandson");
+                },
+                doOnce:function () {
+                    alert("我只能被点击一次");
+                },
+                clear:function () {
+                    alert("clear");
+                },
+                doSome:function () {
+                    alert("按下ctrl和点击了元素");
+                }
+                
+            }
+        });
+    //    还可以使用vue对象直接调用
+    //     app.greet();
+        
+        
+    </script>
+    
+    
+</body>
+</html>

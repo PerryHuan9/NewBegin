@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试vue在表单元素中的运用</title>
+    <!--Vue主要使用v-model属性绑定表单元素-->
+    <script src="js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!--1、Vue在输入框和多行输入框中的使用-->
+        <input type="text" v-model="text" placeholder="请输入：">
+        <p>输入了：{{text}}</p>
+        <textarea v-model="textarea" ></textarea><br>
+        <textarea>{{textarea}}</textarea><br>
+        <br><br>
+        
+        <!--2、单个和多个复选框-->
+        <label for="sigle">单个</label><input id="sigle" type="checkbox" v-model="checked"  >
+        <p>单个复选框的选中的值：{{checked}}</p>
+        <label for="first">第一个</label><input id="first" type="checkbox" v-model="multiCheckbox" value="Google">
+        <label for="second">第二个</label><input id="second" type="checkbox" v-model="multiCheckbox" value="Baidu">
+        <label for="third">第三个</label><input id="third" type="checkbox" v-model="multiCheckbox" value="Sougou">
+        <p>多个复选框选中的值：{{multiCheckbox}}</p>
+        <br><br>
+        
+        <!--3、单选按钮-->
+        <label for="benz">Benz</label><input  id="benz" type="radio" v-model="car" value="benz">
+        <label for="audi">Audi</label><input type="radio" id="audi" v-model="car" value="audi">
+        <label for="bmw">BMW</label><input type="radio" id="bmw" v-model="car" value="bmw">
+        <p>被选中的车辆为：{{car}}</p>
+        <br><br>
+        
+        <!--4、select列表-->
+        <select name="company" id="company" v-model="company">
+            <option value="Baidu">百度</option>
+            <option value="Alibb">阿里巴巴</option>
+            <option value="Tencent">腾讯</option>
+        </select>
+        <p>列表选中的元素:{{company}}</p>
+        <br><br>
+        <!--允许多选时-->
+        <select name="car2" multiple id="car2" v-model="car2">
+            <option value="" disabled>请选择</option>
+            <option v-for="option in options" :value="option.value">{{option.name}}</option>
+        </select>
+        <p>选中的车：{{car2}}</p>
+        <!--使用true-value 和false-value-->
+        <input type="checkbox" true-value="yes" false-value="no" v-model="mySelected">
+        <p>使用true-value属性被选中的情况下：my-selected={{mySelected}}</p>
+        
+        
+        
+        
+        
+        <!--5、修饰符-->
+        <!--.lazy v-model默认在input事件中同步输入框的值和数据，添加lazy修饰符后转变为在change事件中同步-->
+        <input type="text" v-model.lazy="lazy">
+        <p>使用lazy后的情况：{{lazy}}</p>
+        <!--.number  尝试将输入的数字字符串转为number类型-->
+        <input type="text" v-model.number="number">
+        <p>输入的数据：{{number}},其类型为：{{typeof number}}</p>
+        <!--trim 过滤输入字符串首尾空格-->
+        <input type="text" v-model.trim="trim">
+        <p>trim后输入的内容：{{trim}}</p>
+        <button @click="gain">验证去掉空格</button>
+        
+        
+        
+        
+        
+        
+        
+        
+    </div>
+    <script>
+        var vm=new Vue({
+            el:"#app",
+            data:{
+                text:"",
+                textarea:"",
+                checked:"",
+                multiCheckbox:[],
+                car:"",
+                company:"",
+                lazy:"",
+                number:"",
+                trim:"",
+                car2:[],
+                options:[
+                    {name:"Audi",value:123},
+                    {name:"Benz",value:888},
+                    {name:"BWM",value:666},
+                    {name:"Dazhong",value:456},
+                ],
+                mySelected:""
+            },
+            methods:{
+                gain:function () {
+                    alert(this.trim);
+                }
+            }
+            
+            
+        });
+        
+        
+    </script>
+    
+    
+</body>
+</html>

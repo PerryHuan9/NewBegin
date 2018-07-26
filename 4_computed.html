@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试Vue中的计算属性computed</title>
+    <script src="js/vue.js"></script>
+</head>
+<body>
+    
+    <!--我们可以使用 methods 来替代 computed，效果上两个都是一样的，但是 computed 是基于它的依赖缓存，-->
+    <!--只有相关依赖发生改变时才会重新取值。而使用 methods ，在重新渲染的时候，函数总会重新调用执行。-->
+    <div id="app">
+        <p>原始字符串：{{message}}</p>
+        <p>反转后的字符串：{{reverseMessage}}</p>
+        <!--computed有两个属性get和set-->
+        <p>{{site}}</p>
+    
+    
+    </div>
+    
+    <script>
+        var vue = new Vue({
+            el: '#app',
+            data: {
+                message: "I am a char .",
+                name: "Google",
+                url: "http://www.google.com"
+            },
+            computed: {
+                reverseMessage: function () {
+                    return this.message.split(" ").reverse().join(" ");
+                },
+                site: {
+                    get: function () {
+                        return this.name + "  ,  " + this.url;
+                    },
+                    set: function (newValue) {
+                        var names = newValue.split(" ");
+                        console.info(names)
+                        this.name = names[0];
+                        this.url = names[names.length - 1];
+                    }
+                }
+            }
+            
+        });
+        vue.site = "百度 http://www.baidu.com";
+        document.write("网站的名字：" + vue.name + "<br>");
+        document.write("网站的url：" + vue.url);
+    
+    
+    </script>
+
+
+</body>
+</html>

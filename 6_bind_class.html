@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试绑定class</title>
+    <script src="js/vue.js"></script>
+    <style>
+        .css1 {
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+        
+        .css2 {
+            height: 20px;
+            background: green;
+            border: 1px solid red;
+            border-radius: 50%;
+        }
+    
+    </style>
+
+</head>
+<body>
+    
+    <div id="app">
+        <!--改变元素的class值-->
+        <p :class="{css1:isCss1}"></p>
+        <p :class="{css1:isCss1,css2:isCss2}"></p>
+        <p :class="{css2:isCss2,css1:isCss1}"></p>
+        <p :class="classObject"></p>
+        <!--计算属性-->
+        <p :class="computedClass"></p>
+        <!--数组赋值class-->
+        <!--对于数组中的值要使用字符串，没有用字符串的为参数-->
+        <p :class="['css1','css2']"></p>
+        <p :class="[first,second]"></p>
+        <!--使用三目运算符-->
+        <p :class="['css1',isSelect ? 'css2 ':'']"></p>
+    
+    </div>
+    <script>
+        var vue = new Vue({
+            el: "#app",
+            data: {
+                isCss1: true,
+                isCss2: true,
+                classObject: {
+                    css1: true,
+                    css2: true
+                },
+                error: {
+                    type: 'fatal'
+                },
+                first: 'css1',
+                second: 'css2',
+                isSelect: true
+            },
+            computed: {
+                computedClass: function () {
+                    return {
+                        css1: this.isCss1 && !this.error,
+                        css2: this.error && this.error.type === 'fatal'
+                    }
+                }
+            }
+
+        })
+    
+    </script>
+
+
+</body>
+</html>

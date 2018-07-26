@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试Vue中的一些注意事项</title>
+    <script src="js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!--由于JS的限制，Vue不能检测一下变动的数组:
+            1、当利用索引直接设置一个项时
+            2、当你修改你的数组的长度时
+        -->
+        <p>数组更新应该注意的事情：{{items}}</p>
+        <button @click="addItem">添加元素</button>
+        <!--Vue对于已经创建的实例，Vue不能动态添加根级别的响应式属性，可以添加非更级别的
+        需要使用使用Vue.set(obj,key,value)-->
+        <p>对象属性的更新应该注意的事项：{{obj}}</p>
+        <p>data:{{$data}}</p>
+    
+    
+    </div>
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                items: ['a', 'b', 'c'],
+                index:4,
+                obj:{
+                    name:'perry'
+                }
+            },
+            methods:{
+                addItem:function () {
+                    vm.items.push('d');//响应式
+                    // this.items[this.index++]='e';//非响应式，不会更新
+                    // this.items.length=5;//不会更新，非响应式
+                }
+            }
+
+        });
+        //专门用于解决第一类问题
+        vm.items.push("h");
+        vm.$set(vm.items,4,'e');
+        Vue.set(vm.items,5,'f');
+        vm.items.splice(6,1,'g');
+        // 解决第二类问题的方法
+        vm.items.splice(2,3);//从index为2的元素开始删除3个元素
+    //    对象属性更新
+        vm.a=10;//不会更新，添加根属性
+        vm.obj.age=34;//会更新，添加非根级别
+        vm.$set(vm.obj,'sex',"男");
+        Vue.set(vm.obj,'id','2015441314117');
+        //需要为已有对象添加多个新属性时，比如使用Object.assign()或_.extend(),
+        //这种情况下应该用两个对象的属性新建一个新对象，而不要像下面那样
+        // Object.assign(vm.obj,{class:"15通1",hobby:"study"});
+        // 应该这样
+        vm.obj=Object.assign({},vm.obj,{
+            class:"15通1",
+            favoriteColor:"red"
+        });
+        
+    
+    
+    </script>
+
+
+</body>
+</html>

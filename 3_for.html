@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试Vue中的循环</title>
+    <script src="js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!--列表中使用v-for-->
+        <ol>
+            <li v-for="site in sites" style="font-size: 25px">
+                {{site.name}}
+            </li>
+        </ol>
+        <!--模板中使用v-for-->
+        <template>
+            <p v-for="good in goods">{{good}}</p>
+        </template>
+        
+        <!--v-for迭代对象-->
+        <ul>
+            <li v-for="value in object">{{value}}</li>
+        </ul>
+        <!--接收对象的键和值-->
+        <ul>
+            <li v-for="(value,key) in object">
+                {{key}}:{{value}}
+            </li>
+        </ul>
+        <!--接收对象的键值和索引-->
+        <ul >
+            <li style="list-style: none" v-for="(value,key,index) in object">
+                {{++index}}. {{key}}:{{value}}
+                
+            </li>
+        </ul>
+        <!--迭代整数-->
+        <ul>
+            <li v-for="n in 10">{{n}}</li>
+        </ul>
+        <!--v-for迭代数组-->、
+        <ul>
+            <li v-for="value in array">{{value}}</li>
+        </ul>
+        
+        
+        
+        
+    </div>
+    <script>
+        
+        new Vue({
+            el:"#app",
+            data:{
+                sites:[
+                    {name:'perry'},
+                    {name:'simon'},
+                    {name:'zhidi'}
+                ],
+                goods:['clothes','ice-cream','light','apple'],
+                object:{
+                    name:"baidu",
+                    url:"http://www.baidu.com",
+                    description:"百度是一个搜索网站"
+                },
+                array:[1,2,32,43,4535,56456,656,7657]
+            }
+        })
+        
+    </script>
+    
+    
+</body>
+</html>

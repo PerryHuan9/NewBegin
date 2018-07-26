@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试Vue强大的组件</title>
+    <script src="js/vue.js"></script>
+
+</head>
+<body>
+    <!--1、全局组件-->
+    <div id="app">
+        <part></part>
+    </div>
+    
+    <!--2、局部组件-->
+    <div id="app2">
+        <part2></part2>
+    </div>
+    
+    <!--3、props 是父组件用来传递数据的一个自定义属性-->
+    <div id="app3">
+        <part3 contend="Hello Word  天涯何处无芳草" color="red"></part3>
+        <!--动态props-->
+        <part3 :contend="msg"></part3>
+        <input type="text" v-model="newmsg"><br>
+        <part3 :contend="newmsg"></part3>
+        <ol>
+            <item v-for="item in sites" :todo="item"></item>
+        </ol>
+    
+    
+    </div>
+    
+    <div id="app4">
+        <list-item third="必填项" :fifth="{message:'perry'}" sixth="warning"></list-item>
+        <hr>
+        <!--以一个对象将所有参数一并传入,传全参时不能使用缩写-->
+        <list-item v-bind="params"></list-item>
+    </div>
+    
+    
+    
+    <script>
+        Vue.component('part', {
+            template: "<h1>全局组件</h1>"
+        });
+        var part1 = new Vue({
+            el: '#app',
+        });
+        //局部组件
+        var part2 = new Vue({
+            el: "#app2",
+            components: {
+                part2: {
+                    template: "<h3>局部组件</h3>"
+                }
+            }
+        });
+        Vue.component("part3", {
+            props: ['contend'],
+            template: "<p>{{contend}}</p>"
+
+        });
+        Vue.component("item", {
+            props: ['todo'],
+            template: "<li>{{todo.text}}</li>"
+        });
+        var part3 = new Vue({
+            el: "#app3",
+            data: {
+                msg: "新内容，新气象",
+                newmsg: "",
+                sites: [
+                    {text: "Google"},
+                    {text: "Baidu"},
+                    {text: "Sougou"}
+                ]
+            }
+
+        });
+
+        
+        
+        //    props的验证,对每个传入的参数进行类型限制、必填、默认值和使用自定义验证函数
+        //对象有默认值时，必须从工厂返回默认值
+        Vue.component("list-item", {
+                //禁用特性继承,该组件不会继承父组件的特性
+                inheritAttrs:false
+                ,props: {
+                    //基础的类型检查（'null'匹配任何类型）
+                    first:Number,
+                    //多个可能的类型
+                    second:[String,Number],
+                    //必填的字符串
+                    third:{
+                        type:String,
+                        required:true
+                    },
+                    //带有默认值的数字
+                    fourth:{
+                        type:Number,
+                        default:100
+                    },
+                    //带有默认值得对象
+                    fifth:{
+                        type:Object,
+                        //对象或数组且一定会从一个工厂返回默认值
+                        default:function () {
+                            return {
+                                message:'hello'
+                            }
+                        }
+                        
+                    },
+                    //自定义验证函数
+                    sixth:{
+                        validator:function (value) {
+                            //这个值必须匹配下列字符串中的一个
+                            return ['success','warning','danger'].indexOf(value)!==-1
+                        }
+                    }
+        
+                },
+                template:
+                    `<div>
+                          <p>first: {{first}}</p>
+                          <p>second:{{second}}</p>
+                          <p>third: {{third}}</p>
+                          <p>fourth:{{fourth}}</p>
+                          <p>fifth: {{fifth.message}}</p>
+                          <p>sixth: {{sixth}}</p>
+                    </div>
+                    `
+            });
+            
+        new Vue({
+            el:"#app4",
+            data:{
+                params:{
+                    first:888,
+                    second:"第二个参数",
+                    third:"必填项"
+                }
+            }
+            
+        })
+        
+    
+    
+    </script>
+
+
+</body>
+</html>

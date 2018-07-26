@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试绑定style属性</title>
+    <script src="js/vue.js"></script>
+    
+</head>
+<body>
+    <div id="app">
+        <p :style="css"></p>
+        <p :style="{width:'100px',background:color,height:hei+'px'}">你好啊</p>
+        <!--数组方式引入-->
+        <p :style="[first,second]">使用数组修改内联style</p>
+        <p :style="[{width:'200px',height:'200px'},{color:'blue',background:'green'}]">使用数组修改内联style</p>
+        
+        
+        
+        
+    </div>
+    <script>
+       new Vue({
+           el:"#app",
+           data:{
+               css:{
+                   width:'200px',
+                   height:'200px',
+                   background:'green',
+                   borderRadius:'20%'
+               },
+               hei:100,
+               color:'blue',
+               first:{
+                   width:'300px',
+                   height:'300px'
+               },
+               second:{
+                   color:'white',
+                   background:'red'
+               }
+           }
+       });
+       
+       
+    </script>
+    
+    
+</body>
+</html>

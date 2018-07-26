@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试Vue的自定义指令</title>
+    <script src="js/vue.js"></script>
+</head>
+<body>
+    <!--1、v-focus 创建一个元素自动获得焦点-->
+    <div id="app">
+        <p>自定义一个属性v-focus是页面载入时该元素获得焦点</p>
+        <input type="text" v-focus>
+        <input type="text" v-focus2>
+    </div>
+    <br>
+    <div id="app2">
+        <p>测试在其他实例使用focus</p>
+        <input type="text" v-focus>
+        <input type="text" v-focus2>
+    </div>
+    
+    
+    <script>
+        <!--自定义全局指令-->
+        Vue.directive('focus',{
+            inserted:function (el) {
+                el.focus();
+            }
+        });
+        
+        new Vue({
+            el:"#app",
+        //    自定义局部指令
+            directives:{
+                focus2:{
+                    inserted:function (el) {
+                        el.focus();
+                    }
+                }
+            }
+        })
+        
+        new Vue({
+            el:"#app2",
+            
+        })
+        
+        
+        
+    </script>
+    
+</body>
+</html>

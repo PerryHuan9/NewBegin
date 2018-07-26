@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试Vue watch监听属性</title>
+    <script src="js/vue.js"></script>
+
+</head>
+<body>
+    <div id="app">
+        <table>
+            <tr>
+                <td>米：</td>
+                <td><input type="text" v-model="meters"></td>
+            </tr>
+            <tr>
+                <td>千米：</td>
+                <td><input type="text" v-model="kilometers"></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <p id="info"></p>
+                </td>
+            </tr>
+        
+        
+        </table>
+        <br>
+    
+    
+    </div>
+    
+    <script>
+        var vue = new Vue({
+            el: "#app",
+            data: {
+                meters: 0,
+                kilometers: 0
+            },
+            watch: {
+                meters: function (value) {
+                    this.meters = value;
+                    this.kilometers = value / 1000;
+                },
+                kilometers: function (value) {
+                    this.kilometers = value;
+                    this.meters = value * 1000;
+                }
+            }
+        });
+        //$watch是一个实例方法
+        vue.$watch('kilometers', function (newValue, oldValue) {
+            // 这个回调将在 vm.kilometers 改变后调用
+            document.getElementById("info").innerHTML="修改前的值："+oldValue+",修改后的值:"+newValue;
+        })
+    
+    
+    </script>
+
+
+</body>
+</html>
