@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <anchored-heading level="2">
+            Hello Word!!
+            <h3>第二标题</h3>
+        </anchored-heading>
+    </div>
+    
+    
+    
+    <script>
+        var getChildrenTextContent = function (children) {
+            return children.map(function (node) {
+                console.info(node.children);
+                return node.children
+                    ? getChildrenTextContent(node.children)
+                    : node.text
+            }).join('')
+        };
+        //render函数用于渲染dom元素，它比template更接近编译器，该函数接收一个参数，为createElement方法
+        //createElemnet()函数接收三个参数，第一个为要创建的元素，可以为普通元素或组件，必需参数。
+        //第二个参数为一个对象，是该元素或组件的属性，可以通过最高字段如'class',style,attrs,props,domprops等设置，可选
+        //最后一个参数为数组或字符串，是该元素的子元素或值，为数组时且有子元素时接受的是createElement创建的VNode，可选
+        Vue.component('anchored-heading', {
+            render: function (createElement) {
+                // 创建 kebabCase 风格的ID
+                console.log(this.$slots.default);
+                var headingId = getChildrenTextContent(this.$slots.default)
+                    .toLowerCase()
+                    .replace(/\W+/g, '-')
+                    .replace(/(^\-|\-$)/g, '');
+
+                return createElement(
+                    'h' + this.level,{
+                        attrs:{
+                            id:'h'
+                        },
+                        style:{
+                            color:'red'
+                        }
+                    },
+                    [
+                        createElement('a', {
+                            attrs: {
+                                name: headingId,
+                                href: '#' + headingId
+                            }
+                        }, this.$slots.default)
+                    ]
+                );
+            },
+            props: {
+                level: {
+                    type: Number,
+                    required: true
+                }
+            }
+        });
+        
+        new Vue({
+            el:"#app",
+            data:{
+                // level:1
+            }
+        })
+        
+    
+    </script>
+</body>
+</html>

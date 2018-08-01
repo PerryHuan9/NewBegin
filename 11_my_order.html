@@ -16,8 +16,15 @@
     <div id="app2">
         <p>测试在其他实例使用focus</p>
         <input type="text" v-focus>
-        <input type="text" v-focus2>
+        <!--<input type="text" v-focus2>-->
     </div>
+    
+    <div id="hook-arguments-example" v-demo:foo.a.b="message">
+        <div v-mydemo="{ color: 'white', text: 'hello!' }"></div>
+        
+    </div>
+    
+    
     
     
     <script>
@@ -44,6 +51,46 @@
             el:"#app2",
             
         })
+        
+    //    自定义指令的钩子函数
+    //    有bind、inserted、update、componentUpdated和unbind钩子函数
+    //    每个钩子函数都有三个参数，el元素、binding对象、vnode虚拟节点，
+        // update和conponentUpdate函数有第四个参数 oldVnode上一个虚拟节点
+        Vue.directive('demo',{
+            bind(el,binding,vnode){
+                let s=JSON.stringify;
+                el.innerHTML =
+                    'name: '       + s(binding.name) + '<br>' +
+                    'value: '      + s(binding.value) + '<br>' +
+                    'expression: ' + s(binding.expression) + '<br>' +
+                    'argument: '   + s(binding.arg) + '<br>' +
+                    'modifiers: '  + s(binding.modifiers) + '<br>' +
+                    'vnode keys: ' + Object.keys(vnode).join(', ');
+            }
+        });
+        
+      
+        
+    //    简写形式  在很多时候，你可能想在 bind 和 update 时触发相同行为，而不关心其它的钩子。
+     Vue.directive('color-change',function (el,binding) {
+         el.style.backgroundColor=binding.value;
+     })
+    //    对象字面量  如果指令需要多个值，可以传入一个 JavaScript 对象字面量。
+        // 记住，指令函数能够接受所有合法的 JavaScript 表达式。
+        
+    Vue.directive('mydemo',function (el,binding) {
+        console.log(binding.value.color);
+        console.log(binding.value.text);
+    })
+
+
+        new Vue({
+            el: '#hook-arguments-example',
+            data: {
+                message: 'hello!'
+            }
+        });
+        
         
         
         

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试混入</title>
+    <script src="js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!--官方说法，混入是一种分发Vue组件中可复用功能的非常灵活的方式，混入对象可以包含任意组件选项-->
+        <component></component>
+    
+    </div>
+    <script>
+        // 定义一个混入对象
+        let mixin = {
+            data: function () {
+                return {
+                    message: 'hello',
+                    word: 'word'
+                }
+            },
+            created: function () {
+                console.info("mixin里面的created方法" + this.message);
+            }
+        };
+        //混入组件,混入后所有该混入对象的选项将会成为该组件本身的选项
+        //当混入对象和组件有同名选项时，以组件的数据优先
+        //但钩子函数则都会执行，组件的优先执行
+        Vue.component('component', {
+            mixins: [mixin],
+            template: `<h3>{{this.message}} {{this.word}}</h3>`
+        });
+
+        new Vue({
+            mixins: [mixin],
+            el: "#app",
+            data: {
+                message: 'Hi'
+            },
+            created() {
+                console.info("new Vue()下的的钩子函数" + this.message);
+            }
+        });
+
+        //全局混入，一旦使用全局混入，所有之后创建的Vue实例都会受影响
+        Vue.mixin({
+            created() {
+                var myOption = this.$options.myOption;
+                if (myOption) {
+                    console.log(myOption);
+                }
+            }
+        });
+
+        new Vue({
+            myOption: 'hello'
+        })
+
+        //    对于自定义选项的合并，如果要采用自定义的合并策略，则可为Vue.config.optionMergeStrategirs添加一个函数
+        //     对于大多数对象选项，可以使用 methods 的合并策略：
+        let strategies = Vue.config.optionMergeStrategies;
+        strategies.myOption = strategies.methods;
+    
+    </script>
+
+
+</body>
+</html>
