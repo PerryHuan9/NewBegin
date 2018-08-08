@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试嵌套的命名视图路由</title>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    
+    <style>
+    
+    </style>
+
+</head>
+<body>
+    <div id="app">
+        <h1>Nested Named View</h1>
+        <router-view></router-view>
+    </div>
+    <script>
+        const SettingNav = {
+            template:
+                `<div>
+                <router-link to="/settings/emails">emails</router-link>
+                <br>
+                <router-link to="/settings/profile">profile</router-link>
+            </div>
+            `
+        };
+        const Setting = {
+            template:
+                `<div>
+                    <h2>User Settings</h2>
+                    <SettingNav></SettingNav>
+                       <router-view />
+                       <router-view name="helper"/>
+                 </div>
+                 `,
+            components: {SettingNav}
+        };
+     
+
+        const EmailDescription = {
+            template:
+                `<div>
+                    <h3>Email Description</h3>
+                </div>
+                `
+        };
+
+        const Profile = {
+            template: '<div><h3>Edit your profile</h3></div>'
+        };
+        const ProfilePreview = {
+            template: '<div><h3>Preview of your profile</h3></div>'
+        };
+
+        const router = new VueRouter({
+            routes: [
+                {
+                    path: "/settings",
+                    component: Setting,
+                    children: [
+                        {
+                            path: "emails",
+                            component: EmailDescription
+                        },
+                        {
+                            path: "profile",
+                            components: {
+                                default: Profile,
+                                helper: ProfilePreview
+                            }
+                        }
+                    ]
+                }
+            ]
+        });
+        router.push('/settings/emails');
+
+        new Vue({
+            router,
+            el: "#app"
+
+        });
+    
+    
+    </script>
+
+</body>
+</html>

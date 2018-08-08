@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试在render中js代替模板功能</title>
+    <script src="js/vue.js"></script>
+</head>
+<body>
+    <!--在render中并没有对模板中的功能，例如对v-if，v-for、v-model等并没有提供专用的API
+    所以只能用js实现-->
+    <div id="app"></div>
+    <div id="app2"></div>
+    <div id="app3"></div>
+    
+    
+    <script>
+        /**
+         类似于
+         <ul v-if="items.length">
+         <li v-for="item in items">{{ item.name }}</li>
+         </ul>
+         <p v-else>No items found.</p>
+
+         在render中的实现如下
+         */
+        new Vue({
+            el: "#app",
+            data: {
+                items: [
+                    {name: 'Benz'},
+                    {name: 'Audi'},
+                    {name: 'BWM'}
+                ]
+            },
+            render(createElement) {
+                if (this.items.length) {
+                    return createElement('ul',
+                        this.items.map(function (item) {
+                            return createElement("li", item.name);
+                        })
+                    );
+                } else {
+                    return createElement("p", "items的长度为0.");
+                }
+            }
+        });
+
+        //    以下是对于v-model的js实现
+
+        let vue = new Vue({
+            el: "#app2",
+            data: {
+                value: "aksdnjk "
+            },
+            render(createElement) {
+                var self = this;
+                return createElement('div', [
+                        createElement("input", {
+                            domProps: {
+                                value: self.value
+                            },
+                            on: {
+                                input(event) {
+                                    self.value = event.target.value;
+                                },
+                                //模拟使用stop、prevent、self等修饰符的情况
+                                keyup(event) {
+                                    // 如果触发事件的元素不是事件绑定的元素
+                                    // 则返回
+                                    if (event.target !== event.currentTarget) return
+                                    // 如果按下去的不是 enter 键或者
+                                    // 没有同时按下 shift 键
+                                    // 则返回
+                                    if (!event.shiftKey || event.keyCode !== 13) return
+                                    // 阻止 事件冒泡
+                                    event.stopPropagation()
+                                    // 阻止该元素默认的 keyup 事件
+                                    event.preventDefault()
+                                }
+                            }
+                        }),
+                        createElement("p", self.value)
+                    ]
+                );
+            },
+        });
+
+        Vue.component("my-input", {
+            props: ["value"],
+            template:
+                `<div>
+                       <h3>输入框</h3>
+                       <p>input:{{value}}</p>
+                       <input @input="$emit('input',$event.target.value)" :value="value"/>
+                </div>`
+        });
+        //    实现组件的v-model双向绑定
+        new Vue({
+            el: "#app3",
+            data: {
+                value: "年后的"
+            },
+            render(createElement) {
+                let self = this;
+                return createElement('div', [
+                        createElement("my-input", {
+                            domProps: {},
+                            props: {
+                                value: self.value
+                            },
+                            on: {
+                                input(event) {
+                                    self.value = event;
+                                }
+                            }
+                        }),
+                        createElement("p", self.value)
+                    ]
+                );
+            }
+        })
+    
+    
+    </script>
+
+
+</body>
+</html>

@@ -6,17 +6,23 @@
     <script src="js/vue.js"></script>
     <script>
         Vue.component("test-slot",{
-           template:
-               `<div>
+            // 插槽允许有默认内容
+            template:
+                `<div>
                     <strong>Error!</strong>
                     <slot></slot>
                 </div>
-               `
+               `,
+            data:function () {
+                return {
+                    name:"perry"
+                }
+            }
         });
-    //    具名插槽
+        //    具名插槽
         Vue.component("slot-name",{
-           template:
-               `<div>
+            template:
+                `<div>
                       <header>
                             <slot name="header"></slot>
                       </header>
@@ -30,7 +36,22 @@
                 </div>
                `
         });
-        
+
+        //    作用域插槽
+        Vue.component("todo-list",{
+            inheritAttrs:false,
+            props:{
+                todos:[Array,Object]
+            },
+            template:
+                `<ul>
+                <li v-for="todo in todos" :key="todo.id" style="display: block;" >
+                    <slot :data="todo">{{todo.text}}</slot>
+                </li>
+             </ul>
+            `
+        });
+    
     </script>
     
     <style>
@@ -42,13 +63,13 @@
     </style>
 </head>
 <body>
-    
     <div id="app">
         <!--1、插槽内容  slot可以接收任何内容、代码，包括组件-->
         <test-slot>Something bad happened.你是谁啊，我认识你吗</test-slot>
         <test-slot>
             Something bad happened.
-            <h3>标题</h3>
+            <!--允许使用变量，但该变量必须是本作用域的才会生效，这里name的值将会是"岔道口"-->
+            <h3>标题{{name}}</h3>
             <img src="img/flower.jfif" alt="图片无法显示">
         
         </test-slot>
@@ -66,21 +87,44 @@
                 </ul>
             </template>
             <p>你好啊</p>
-            <template slot="footer">
-                <p>结尾</p>
-                <p>粤ICP备6545646456415</p>
-            </template>
+            <p slot="footer">
+            <p>结尾</p>
+            <p>粤ICP备6545646456415</p>
+            </p>
         </slot-name>
         
+        <!--使用作用域插槽，通过slot-scope实现-->
+        <todo-list :todos="todos">
+            <template slot-scope="slotProps">
+                <span v-if="slotProps.data.isTrue">√</span>
+                {{slotProps.data.text}}
+            </template>
+        </todo-list>
         
+        <!--使用ES2015结构语法-->
+        <todo-list :todos="todos">
+            <template slot-scope="{data}">
+                <span v-if="data.isTrue">√</span>
+                {{data.text}}
+            </template>
+        </todo-list>
     </div>
-    
     
     <script>
         new Vue({
-            el:"#app"
+            el:"#app",
+            data:{
+                name:"岔道口",
+                todos:[
+                    {text:"A",id:1,isTrue:true},
+                    {text:"B",id:2,isTrue:true},
+                    {text:"C",id:3,isTrue:false},
+                    {text:"D",id:4,isTrue:true},
+                ],
+                // slotProps:""
+            }
         })
-        
+    
     </script>
-</body>
+    </body>
 </html>

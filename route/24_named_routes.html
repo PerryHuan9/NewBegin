@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试命名路由</title>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <style>
+        .router-link-active {
+            color: red;
+        }
+    
+    </style>
+
+</head>
+<body>
+    
+    
+    <div id="app">
+        <p>
+            <router-link :to="{name:'map'}">地图</router-link>
+            <router-link :to="{name:'list',params:{list:'最后一项'}}">列表</router-link>
+            <router-link :to="{name:'main',params:{main:'最后的昏黄'}}">主页</router-link>
+        </p>
+        <router-view></router-view>
+    </div>
+    <script>
+        const MapRoute = {
+
+            template:
+                `<div style="width: 300px;height: 300px;background-color: aliceblue">
+                我是地图
+            </div>
+            `
+        };
+
+        const MainRoute = {
+            template:
+                `<div   style="font-size: 35px">我是主页
+                   {{$route.params.main}}
+                </div>
+            `
+        };
+        const ListRoute = {
+            template:
+                `<ul>
+                <li>第一</li>
+                <li>第二</li>
+                <li>第三</li>
+                <li>{{$route.params.list}}</li>
+            </ul>
+            `
+        };
+
+        const routes = [
+            {
+                path: "/page/map-route",
+                name: 'map',
+                component: MapRoute
+            },
+            {
+                path: "/page/main-route/:main",
+                name: 'main',
+                component: MainRoute
+            },
+            {
+                path: "/page/list-route/:list",
+                name: 'list',
+                component: ListRoute
+            }
+        ];
+
+        const router = new VueRouter({
+            // mode:'history',
+            routes
+        });
+
+        new Vue({
+
+            router
+        }).$mount("#app");
+    
+    
+    </script>
+
+
+</body>
+</html>

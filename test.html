@@ -2,41 +2,50 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Vue 测试实例 - 菜鸟教程(runoob.com)</title>
-    <script src="https://cdn.bootcss.com/vue/2.2.2/vue.min.js"></script>
+    <title>Vue 测试</title>
+    <script src="js/vue.js"></script>
 </head>
 <body>
     <div id="app">
-        <input type="checkbox"  :checked="value">
-    
-        <div @click="alert(1)">
-            <a href="/#" @click.prevent="alert(2)">adhasjk
-                <div @click="alert(3)">zzzz</div>
-            </a>
-            a
-        </div>
+        <!--使用作用域插槽，通过slot-scope实现-->
+        <todo-list :todos="items">
+            <template slot-scope="my">
+                <span v-if="my.data.isTrue">√</span>
+                {{my.data.text}}
+            </template>
+        </todo-list>
+        
     </div>
-   
-    
     <script>
-        new Vue({
-            el:"#app",
-            data:{
-                value:"checked"
+        //作用域插槽
+        Vue.component("todo-list", {
+            inheritAttrs: false,
+            props: {
+                todos: [Array, Object]
             },
-            watch:{
-                value:function (tag) {
-                    alert(tag);
-                }
+            template:
+                `<ul>
+                    <li v-for="todo in todos" :key="todo.id" >
+                        <slot :data="todo">{{todo.text}}</slot>
+                    </li>
+               </ul>`
+        });
+        new Vue({
+            el: "#app",
+            data: {
+                name: "岔道口",
+                items: [
+                    {text: "A", id: 1, isTrue: true},
+                    {text: "B", id: 2, isTrue: true},
+                    {text: "C", id: 3, isTrue: false},
+                    {text: "D", id: 4, isTrue: true},
+                ]
             }
-        })
-
-
-     
-
-
-
+        });
+        
     </script>
+    
+    
     
 </body>
 </html>

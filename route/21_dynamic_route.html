@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试动态路由</title>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <!--对于在相同的组件内传入不同的用户数据以实现动态路由，可以通过路径出入参数
+    然后在组件对象内部可以使用$route.params接收-->
+    <style>
+        .router-link-active{
+            color: red;
+        }
+        
+    </style>
+    
+</head>
+<body>
+    <div id="app">
+        <p>
+            <router-link to="/user/perry/201541314117">perry</router-link>
+            <router-link to="/user/simon/201541314112">simon</router-link>
+        </p>
+        <router-view></router-view>
+        
+    </div>
+    
+    <script>
+        const User={
+            template:
+            `<p>
+                    Name:{{$route.params.name}}<br>
+                    Id:{{$route.params.id}}
+              </p>`,
+        //    另外可以监听$route
+            watch:{
+                '$route'(newV,oldV){
+                
+                }
+            },
+        //    还可以使用钩子函数
+            beforeRouteUpdate(to,from,nest){
+            //    响应改变
+            //    调用next()继续执行
+            }
+        }
+        
+        const routes=[
+            {path:'/user/:name/:id',component:User}
+        ];
+        const router=new VueRouter({routes});
+        new Vue({
+            router
+        }).$mount("#app")
+        
+        
+        
+    </script>
+    
+
+
+    
+</body>
+</html>

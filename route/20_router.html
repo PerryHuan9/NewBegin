@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试router</title>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <style>
+        .router-link-active {
+            color: red;
+        }
+
+    </style>
+    
+</head>
+<body>
+    <!---->
+    <div id="app">
+      <p>
+          <!--路由选项-->
+          <router-link to="/foo">foo</router-link>
+          <router-link to="/bar">bar</router-link>
+      </p>
+        <!--路由出口，路由到的组件将会在这里渲染-->
+        <router-view></router-view>
+    </div>
+    <script>
+        const foo={
+            template:'<div>foo</div>'
+        };
+        const bar={
+            template:`<div>bar</div>`
+        }
+        
+        const routes=[
+            {path:'/foo',component:foo},
+            {path:'/bar',component:bar}
+        ];
+        const router=new VueRouter({routes});
+        const app=new Vue({
+            el:"#app",
+            router
+        });
+    //    或者
+    //     const app2=new Vue({
+    //         router
+    //     }).$mount("#app");
+        
+        
+        
+    
+        
+    </script>
+    
+    
+</body>
+</html>

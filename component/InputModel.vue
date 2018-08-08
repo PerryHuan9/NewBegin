@@ -20,11 +20,9 @@
 </template>
 
 <script>
-    // model.exports = {}
 
     export default {
-        name: "input-model",
-        props: ['model'],
+        props: ['value'],
         data: function () {
             return {}
         }

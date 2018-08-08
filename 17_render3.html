@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试render</title>
+    <script src="js/vue.js"></script>
+</head>
+<body>
+    <!--在render中使用插槽-->
+    <div id="app">
+        <test-slot>
+            <h1>标题</h1>
+        </test-slot>
+        
+        <scope-slot data="你好啊">
+            <template slot-scope="data">{{data.text}}</template>
+        </scope-slot>
+    
+    
+    </div>
+    
+    <div id="app2"></div>
+    <script>
+        //
+        <!--在render中代替slot-->
+        //this.$slots 获取 VNodes 列表中的静态内容
+        Vue.component('test-slot', {
+            render(h) {
+                return h("div", this.$slots.default);
+            }
+        });
+        //作用域插槽
+        Vue.component('scope-slot', {
+            props: ['data'],
+            render(h) {
+                return h('div', [
+                    this.$scopedSlots.default({
+                        text: this.data
+                    })
+                ])
+            }
+        });
+
+        new Vue({
+            el: "#app",
+
+        });
+
+        
+        //如果要用渲染函数向子组件中传递作用域插槽，可以利用 VNode 数据中的 scopedSlots 域：
+        new Vue({
+            el: "#app2",
+            render(h) {
+                return h('div', [
+                        h('scope-slot', {
+                            scopedSlots: {
+                                default(props) {
+                                    return h('span', {
+                                        style: {
+                                            color: 'red'
+                                        }
+                                    }, props.text)
+                                }
+                            },
+                            //为scope-slot的data props传入数据
+                            props:{
+                                data:"我爱你"
+                            }
+                        })
+                    ]
+                );
+            }
+        });
+    
+    
+    </script>
+
+
+</body>
+</html>

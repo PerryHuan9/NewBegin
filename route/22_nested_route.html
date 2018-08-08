@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>嵌套路由</title>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <style>
+        .router-link-active{
+            color: red;
+        }
+        
+    </style>
+
+</head>
+<body>
+    <!--当一个路由里面还有另外一个路由便形成了嵌套路由-->
+    <div id="app">
+        <p>
+            <router-link to="/user/perry">perry信息</router-link>
+            <router-link to="/user/perry/forward">perry技能信息</router-link>
+            <router-link to="/user/simon/communication">simon技能信息</router-link>
+            <button @click="push">simon的另一个技能</button>
+        </p>
+        <router-view></router-view>
+    </div>
+    <script>
+        const User={
+            template:
+            `<div>
+                 <h2>{{$route.params.name}}</h2>
+                 <router-view></router-view>
+            </div>
+            `
+        };
+        const Skill={
+            template:
+            `<div>
+                <h3>技能</h3>
+                <p>{{$route.params.skill}}</p>
+            </div>
+            `
+        };
+        const routes=[
+            {
+                path:'/user/:name',component:User,
+                children:[
+                    // {path:"",component:Skill}
+                    {path:':skill',component:Skill}
+                ]
+            }
+        ];
+        const router=new VueRouter({
+            routes
+        });
+        router.push({ path:`/user/${'simon'}/${'UI'}`});
+        
+        
+        new Vue({
+            router,
+            methods:{
+                push(){
+                    this.$router.push({path:`/user/${'simon'}/${'UI'}`});
+                }
+            }
+            
+        }).$mount("#app")
+        
+        
+    
+    </script>
+
+</body>
+</html>
