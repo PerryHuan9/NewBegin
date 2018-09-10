@@ -5,8 +5,8 @@
     <title>自己封装一个输入组件</title>
     <script src="js/vue.js"></script>
     <script>
-        Vue.component("input-model", {
-            props: ['value'],
+        Vue.component( "input-model", {
+            props: [ 'value' ],
             data: function () {
                 return {}
             },
@@ -29,7 +29,7 @@
                             </td>
                         </tr>
                 </table>`,
-        });
+        } );
     </script>
 </head>
 <body>
@@ -37,11 +37,11 @@
         <input-model :model="inputData"></input-model>
         {{inputData.name}}:{{inputData.sex}}<br>
         {{alldata}}<br>
-        
-        
+    
+    
     </div>
     <script>
-        new Vue({
+        new Vue( {
             el: "#app",
             data: {
                 inputData: {
@@ -51,11 +51,11 @@
             },
             computed: {
                 alldata: function () {
-                    console.info("属性：" + this.inputData.name + ":" + this.inputData.sex);
-                    return "姓名："+this.inputData.name+"，性别："+this.inputData.sex;
+                    console.info( "属性：" + this.inputData.name + ":" + this.inputData.sex );
+                    return "姓名：" + this.inputData.name + "，性别：" + this.inputData.sex;
                 }
             }
-        });
+        } );
     
     </script>
 

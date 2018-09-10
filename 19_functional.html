@@ -10,19 +10,25 @@
         <smart-list :items="items">
         
         </smart-list>
-        
+    
     </div>
     
     
     <script>
+
+        if(" "){
+            console.log('true', true)
+        } else{
+            console.log(false);
+        }
         // 在Vue.component注册中通过标记functional:true设定组件为函数式组件，、
         // 这意味着它无状态（没有响应式数据），无实例（没有this上下文）
         // 而在单文件组件中通过<template functional></template>来设定函数式组件
         // 一旦一个组件设为函数式组件，其render函数便会有第二个参数，context，它的作用是代替this
-        var EmptyList={
-            template:`<i>我是斜体字</i>`
+        var EmptyList = {
+            template: `<i>我是斜体字</i>`
         };
-        var TableList={
+        var TableList = {
             template:
                 `<table>
                     <tr>
@@ -30,38 +36,37 @@
                     </tr>
                 </table>`
         };
-        var OrderedList={};
-        
-        Vue.component('smart-list',{
-            functional:true,
-            props:{
-                items:{
-                    type:Array,
-                    required:true
+        var OrderedList = {};
+
+        Vue.component('smart-list', {
+            functional: true,
+            props: {
+                items: {
+                    type: Array,
+                    required: true
                 },
-                isOrder:Boolean
+                isOrder: Boolean
             },
-            render(h,context){
-                function appropriateListComponent() {
-                    var items=context.props.items;
-                    if(items.length===0) return EmptyList;
-                    if(typeof items[0]==='object')return TableList;
+            render(h, context){
+                function appropriateListComponent(){
+                    var items = context.props.items;
+                    if(items.length === 0) return EmptyList;
+                    if(typeof items[0] === 'object') return TableList;
                     if(context.props.isOrder) return OrderedList;
                 }
-                return h(appropriateListComponent(),context.data,context.children);
+
+                return h(appropriateListComponent(), context.data, context.children);
             }
         });
         new Vue({
-            el:"#app",
-            data:{
-                items:[new Object()]
+            el: "#app",
+            data: {
+                items: [new Object()]
             }
         })
-        
-        
-        
-        
-    </script>
     
+    
+    </script>
+
 </body>
 </html>

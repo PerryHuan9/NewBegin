@@ -6,42 +6,52 @@
     <script src="js/vue.js"></script>
 </head>
 <body>
-    <div id="app">
-        <!--使用作用域插槽，通过slot-scope实现-->
-        <todo-list :todos="items">
-            <template slot-scope="my">
-                <span v-if="my.data.isTrue">√</span>
-                {{my.data.text}}
-            </template>
-        </todo-list>
-        
-    </div>
+    <!--<div id="app">-->
+        <!--&lt;!&ndash;使用作用域插槽，通过slot-scope实现&ndash;&gt;-->
+        <!--<todo-list :todos="items">-->
+            <!--<template slot-scope="my">-->
+                <!--<span v-if="my.data.isTrue">√</span>-->
+                <!--{{my.data.text}}-->
+            <!--</template>-->
+        <!--</todo-list>-->
+        <!---->
+    <!--</div>-->
     <script>
         //作用域插槽
-        Vue.component("todo-list", {
-            inheritAttrs: false,
-            props: {
-                todos: [Array, Object]
-            },
-            template:
-                `<ul>
-                    <li v-for="todo in todos" :key="todo.id" >
-                        <slot :data="todo">{{todo.text}}</slot>
-                    </li>
-               </ul>`
-        });
-        new Vue({
-            el: "#app",
-            data: {
-                name: "岔道口",
-                items: [
-                    {text: "A", id: 1, isTrue: true},
-                    {text: "B", id: 2, isTrue: true},
-                    {text: "C", id: 3, isTrue: false},
-                    {text: "D", id: 4, isTrue: true},
-                ]
-            }
-        });
+        // Vue.component("todo-list", {
+        //     inheritAttrs: false,
+        //     props: {
+        //         todos: [Array, Object]
+        //     },
+        //     template:
+        //         `<ul>
+        //             <li v-for="todo in todos" :key="todo.id" >
+        //                 <slot :data="todo">{{todo.text}}</slot>
+        //             </li>
+        //        </ul>`
+        // });
+        // new Vue({
+        //     el: "#app",
+        //     data: {
+        //         name: "岔道口",
+        //         items: [
+        //             {text: "A", id: 1, isTrue: true},
+        //             {text: "B", id: 2, isTrue: true},
+        //             {text: "C", id: 3, isTrue: false},
+        //             {text: "D", id: 4, isTrue: true},
+        //         ]
+        //     }
+        // });
+        //
+        var obj={
+            a:10,
+            b:'11'
+        };
+        
+        for(var key in obj){
+            console.log(key+":"+obj[key])
+        }
+        
         
     </script>
     

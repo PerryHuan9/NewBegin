@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vuex的第一个例程</title>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vuex/3.0.1/vuex.js"></script>
+</head>
+<body>
+    <div id="app">
+        <p>{{count}}</p>
+        <p>
+            <button @click="increment">+</button>
+            <button @click="decrement">-</button>
+        </p>
+    </div>
+    <script>
+        const store=new Vuex.Store({
+            state:{
+                count:0
+            },
+            mutations:{
+                increment:state=>state.count++,
+                decrement:state=>state.count--,
+            }
+        });
+        //也可以将store注入Vue实例，在内部可以直接this.$store访问store
+        new Vue({
+            el:"#app",
+            // store，
+            computed:{
+                count(){
+                    return store.state.count;
+                }
+            },
+            methods:{
+                increment(){
+                     store.commit('increment');
+                },
+                decrement(){
+                    store.commit('decrement');
+                }
+            }
+        })
+        
+        
+        
+        
+    </script>
+    
+    
+</body>
+</html>
